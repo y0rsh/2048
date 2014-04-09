@@ -54,6 +54,8 @@ KeyboardInputManager.prototype.listen = function () {
     var modifiers = event.altKey || event.ctrlKey || event.metaKey ||
                     event.shiftKey;
     var mapped    = map[event.which];
+      console.log(map[event.which])
+      console.log(self);
 
     if (!modifiers) {
       if (mapped !== undefined) {
