@@ -12,6 +12,9 @@ var Tree = {
             this.levels[num] = [];
         }
         return this.levels[num];
+    },
+    last: function () {
+        return this.levels.length > 0 ? this.levels[this.levels.length - 1] : null;
     }
 };
 function Cells(cells, options) {
@@ -153,7 +156,7 @@ Cells.prototype.down = function () {
     this.lastMove = move;
     this.evaluate();
     this.log.push('down');
-    console.log(JSON.stringify(this.data) === JSON.stringify(this.parent.data));
+    //console.log(JSON.stringify(this.data) === JSON.stringify(this.parent.data));
     if (this.parent !== null && JSON.stringify(this.data) === JSON.stringify(this.parent.data)) {
         this.dead = true;
     }

@@ -54,8 +54,8 @@ KeyboardInputManager.prototype.listen = function () {
     var modifiers = event.altKey || event.ctrlKey || event.metaKey ||
                     event.shiftKey;
     var mapped    = map[event.which];
-      console.log(map[event.which])
-      console.log(self);
+      //console.log(map[event.which])
+      //console.log(self);
 
     // Ignore the event if it's happening in a text field
     if (self.targetIsInput(event)) return;
