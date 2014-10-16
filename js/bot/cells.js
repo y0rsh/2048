@@ -5,18 +5,7 @@
  * Time: 1:43
  * To change this template use File | Settings | File Templates.
  */
-var Tree = {
-    levels: [],
-    level: function (num) {
-        if (!this.levels[num]) {
-            this.levels[num] = [];
-        }
-        return this.levels[num];
-    },
-    last: function () {
-        return this.levels.length > 0 ? this.levels[this.levels.length - 1] : null;
-    }
-};
+
 function Cells(cells, options) {
     options = options || {};
     this.dead = false;
@@ -46,7 +35,7 @@ Cells.prototype.newChild = function () {
 Cells.prototype.addTile = function (x, y, val) {
     this.data[x][y] = val;
     this.log.push('tile[' + x +'][' + y + ']');
-}
+};
 Cells.prototype.cloneData = function() {
     return this.data.map(function(row){
         return row.map(function(tile) {
@@ -68,8 +57,6 @@ Cells.prototype.reScore = function() {
 };
 Cells.prototype.branchMove = function() {
     this.branchType = 'move';
-
-
     this.newChild().up();
     this.newChild().down();
     this.newChild().left();
@@ -124,9 +111,8 @@ Cells.prototype.up = function () {
     this.lastMove = move;
     this.evaluate();
     this.log.push('up');
-    if (this.parent !== null && JSON.stringify(this.data) === JSON.stringify(this.parent.data)) {
-        this.dead = true;
-    }
+    this.isDead();
+
     return move;
 };
 Cells.prototype.down = function () {
@@ -151,15 +137,12 @@ Cells.prototype.down = function () {
             return res;
         }, []).padLeft(4, null));
     });
-
     this.data = newCells;
     this.lastMove = move;
     this.evaluate();
     this.log.push('down');
-    //console.log(JSON.stringify(this.data) === JSON.stringify(this.parent.data));
-    if (this.parent !== null && JSON.stringify(this.data) === JSON.stringify(this.parent.data)) {
-        this.dead = true;
-    }
+    this.isDead();
+
     return move;
 };
 Cells.prototype.left = function() {
@@ -168,10 +151,7 @@ Cells.prototype.left = function() {
     this.data.transponate();
     this.log.pop();
     this.log.push('left');
-    if (this.parent !== null && JSON.stringify(this.data) === JSON.stringify(this.parent.data)) {
-        this.dead = true;
-    }
-
+    this.isDead();
 };
 Cells.prototype.right = function() {
     this.data.transponate();
@@ -179,17 +159,12 @@ Cells.prototype.right = function() {
     this.data.transponate();
     this.log.pop();
     this.log.push('right');
+    this.isDead();
+};
+Cells.prototype.isDead = function() {
     if (this.parent !== null && JSON.stringify(this.data) === JSON.stringify(this.parent.data)) {
         this.dead = true;
     }
 
-};
-Cells.prototype.transponate = function () {
-    for (var length = this.data.length, x = 0; x < length; x++)
-        for (var y = x + 1; y < length; y++) {
-            var e = this.data[x][y];
-            this.data[x][y] = this.data[y][x];
-            this.data[y][x] = e
-        }
-    return this
+    return this.dead;
 };
